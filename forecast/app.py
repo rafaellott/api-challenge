@@ -2,8 +2,8 @@
 from os import path
 from flask import Flask
 from flask_restful import Api
-from api.v1.resources.user import User
-from api.v1.resources.forecast import Forecast
+from forecast.api.v1.resources.user import User
+from forecast.api.v1.resources.forecast import Forecast
 
 
 def start_app(mode="Development"):
@@ -16,7 +16,7 @@ def start_app(mode="Development"):
         instance_path=instance_path,
         instance_relative_config=True
     )
-    app.config.from_object("ppc_busca.config.{}Config".format(mode))
+    app.config.from_object("forecast.config.{}Config".format(mode))
     return app
 
 
