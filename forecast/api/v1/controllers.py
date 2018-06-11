@@ -1,6 +1,9 @@
+import csv
+
 from sqlalchemy.orm.exc import NoResultFound
-from forecast.database.models import User, Forecast, Period, Days
+
 from forecast.database import db
+from forecast.database.models import User, Forecast, Period, Days
 
 
 def add_user(data):
@@ -75,3 +78,26 @@ def delete_user(user_id):
     post = User.query.filter(User.id == user_id).one()
     db.session.delete(post)
     db.session.commit()
+
+
+def export_to_csv(path):
+    outfile = open(path, 'w')
+    outcsv = csv.writer(outfile)
+    records = Forecast.query.all()
+    outcsv.writerow([
+        'id', 'name', 'forecast_id', 'address', 'period_from',
+        'period_to', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday',
+        'friday', 'saturday', 'notification'
+    ])
+    for record in records:
+        outcsv.writerow([
+            record.user.id, record.user.name, record.address,
+            record.period.time_from, record.period.time_to,
+            record.days.sunday, record.days.monday, record.days.tuesday,
+            record.days.wednesday, record.days.thursday, record.days.friday,
+            record.days.saturday, record.notification
+        ])
+
+
+def import_from_csv(path):
+    pass
