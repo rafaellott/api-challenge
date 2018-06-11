@@ -29,7 +29,7 @@ forecast_days = api.model(
     }
 )
 
-forecast = api.model(
+forecast_serializer = api.model(
     'User forecast',
     {
         'id': fields.String(
@@ -51,14 +51,16 @@ user_serializer = api.model(
         'name': fields.String(
             required=True, description="Name of the user"
         ),
-        'forecast': fields.List(fields.Nested(forecast))
+        'forecast': fields.List(fields.Nested(forecast_serializer))
     }
 )
 
 pagination = api.model('A page of results', {
     'page': fields.Integer(description='Number of this page of results'),
     'pages': fields.Integer(description='Total number of pages of results'),
-    'per_page': fields.Integer(description='Number of items per page of results'),
+    'per_page': fields.Integer(
+        description='Number of items per page of results'
+    ),
     'total': fields.Integer(description='Total number of results'),
 })
 

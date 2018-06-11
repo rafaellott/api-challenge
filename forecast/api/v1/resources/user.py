@@ -4,8 +4,10 @@ from flask_restplus import Resource
 from forecast.api import api
 from forecast.api.v1.controllers import add_user, delete_user
 from forecast.api.v1.parsers import pagination_arguments
-from forecast.api.v1.serializers import user_serializer, user_page
-from forecast.database.models import User
+from forecast.api.v1.serializers import (
+    user_serializer, user_page, forecast_serializer
+)
+from forecast.database.models import User, Forecast
 
 ns = api.namespace('users', description='Users operations')
 
@@ -90,10 +92,32 @@ class USerItem(Resource):
     def delete(self, user_id):
         return delete_user(user_id), 204
 
+    # TODO
     def put(self, user_id):
+        raise NotImplementedError("method not implemented")
         # parser = reqparse.RequestParser()
         # parser.add_argument('name')
         # args = parser.parse_args()
         # user = {'name': args['name'], '...': '...'}
         # Users[user_id] = user
-        return '', 200
+        # return '', 200
+
+
+@ns.route('/<int:user_id>/forecast/')
+@api.response(404, 'Forecast not found.')
+class ForecastCollection(Resource):
+
+    @api.marshal_with(forecast_serializer)
+    def get(self, user_id):
+        return Forecast.query.filter(Forecast.user_id == user_id).all()
+
+
+@ns.route('/<int:user_id>/forecast/<int:forecast_id>')
+@api.response(404, 'Forecast not found.')
+class ForecastCollection(Resource):
+
+    def get(self, user_id, forecast_id):
+        pass
+
+    def delete(self, user_id, forecast_id):
+        return delete_forecast(user_id), 204
