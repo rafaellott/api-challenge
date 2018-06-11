@@ -6,13 +6,7 @@ from forecast.api import api
 from forecast.database import db
 
 
-def configure_app(flask_app):
-    flask_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-
-
 def configure_api(flask_app):
-    configure_app(flask_app)
-
     blueprint = Blueprint('api', 'forecast', url_prefix='/api')
     api.init_app(blueprint)
     api.add_namespace(user_namespace)
