@@ -1,2 +1,1 @@
-from .user import User
-from .forecast import Forecast
+from .user import ns as user_namespace
