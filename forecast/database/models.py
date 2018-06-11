@@ -86,4 +86,4 @@ class Forecast(db.Model):
         self.user_id = user_id
 
     def __repr__(self):
-        return '<Forecast %r - %r>' % self.address
+        return '<Forecast %r - %r>' % (self.address, self.user.name)
