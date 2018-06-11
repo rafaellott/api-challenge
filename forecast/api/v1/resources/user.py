@@ -1,68 +1,99 @@
-from flask_restful import reqparse, Resource
+from flask import request
+from flask_restplus import Resource
 
+from forecast.api import api
+from forecast.api.v1.controllers import add_user, delete_user
+from forecast.api.v1.parsers import pagination_arguments
+from forecast.api.v1.serializers import user_serializer, user_page
+from forecast.database.models import User
 
-# Todo
-Users = {
-    '1': {
-        'name': 'Fulano Beltrano',
-        'forecast': [
-            {
-                'address': 'Rua Marshmallow',
-                'period': {
-                    'from': '08:00',
-                    'to': '19:00'
-                },
-                'days': {
-                    'sunday': True,
-                    'monday': True,
-                    'tuesday': True,
-                    'wednesday': True,
-                    'thursday': True,
-                    'friday': False,
-                    'saturday': False
-                },
-                'notification': '07:00'
-            }
-        ]
-    },
-    '2': {
-        'name': 'Ciclano Beltrano',
-        'forecast': [
-            {
-                'address': 'Rua Oreo',
-                'period': {
-                    'from': '22:00',
-                    'to': '06:00'
-                },
-                'days': {
-                    'sunday': True,
-                    'monday': True,
-                    'tuesday': True,
-                    'wednesday': True,
-                    'thursday': True,
-                    'friday': False,
-                    'saturday': False
-                },
-                'notification': '21:00'
-            }
-        ]
-    }
-}
-
+ns = api.namespace('users', description='Users operations')
 
 # Todo
-class User(Resource):
+# Users = {
+#     '1': {
+#         'name': 'Fulano Beltrano',
+#         'forecast': [
+#             {
+#                 'address': 'Rua Marshmallow',
+#                 'period': {
+#                     'from': '08:00',
+#                     'to': '19:00'
+#                 },
+#                 'days': {
+#                     'sunday': True,
+#                     'monday': True,
+#                     'tuesday': True,
+#                     'wednesday': True,
+#                     'thursday': True,
+#                     'friday': False,
+#                     'saturday': False
+#                 },
+#                 'notification': '07:00'
+#             }
+#         ]
+#     },
+#     '2': {
+#         'name': 'Ciclano Beltrano',
+#         'forecast': [
+#             {
+#                 'address': 'Rua Oreo',
+#                 'period': {
+#                     'from': '22:00',
+#                     'to': '06:00'
+#                 },
+#                 'days': {
+#                     'sunday': True,
+#                     'monday': True,
+#                     'tuesday': True,
+#                     'wednesday': True,
+#                     'thursday': True,
+#                     'friday': False,
+#                     'saturday': False
+#                 },
+#                 'notification': '21:00'
+#             }
+#         ]
+#     }
+# }
+
+
+@ns.route('/')
+class UserCollection(Resource):
+
+    @api.expect(pagination_arguments)
+    @api.marshal_with(user_page)
+    def get(self):
+
+        args = pagination_arguments.parse_args(request)
+        page = args.get('page', 1)
+        per_page = args.get('per_page', 10)
+
+        user_query = User.query
+        posts_page = user_query.paginate(page, per_page, error_out=False)
+        return posts_page
+
+    @api.expect(user_serializer)
+    def post(self):
+        add_user(request.json)
+        return '', 201
+
+
+@ns.route('/<int:user_id>')
+@api.response(404, 'User not found.')
+class USerItem(Resource):
+
+    @api.marshal_with(user_serializer)
     def get(self, user_id):
-        return Users[user_id]
+        return User.query.filter(User.id == user_id).one()
 
     def delete(self, user_id):
-        del Users[user_id]
-        return '', 204
+        return delete_user(user_id), 204
 
     def put(self, user_id):
-        parser = reqparse.RequestParser()
-        parser.add_argument('name')
-        args = parser.parse_args()
-        user = {'name': args['name'], '...': '...'}
-        Users[user_id] = user
-        return user, 200
+        # parser = reqparse.RequestParser()
+        # parser.add_argument('name')
+        # args = parser.parse_args()
+        # user = {'name': args['name'], '...': '...'}
+        # Users[user_id] = user
+        return '', 200
