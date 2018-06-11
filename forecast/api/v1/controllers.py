@@ -53,6 +53,7 @@ def add_days(data):
 
 def delete_user(user_id):
     user = User.query.filter(User.id == user_id).one()
+    delete_forecast(user_id=user.id)
     db.session.delete(user)
     db.session.commit()
 
@@ -85,11 +86,13 @@ def add_forecast(data, user_id):
     return forecast
 
 
-def delete_forecast(user_id, forecast_id):
-    forecast = Forecast.query.filter(
-        Forecast.user_id == user_id, Forecast.id == forecast_id
-    ).one()
-    db.session.delete(forecast)
+def delete_forecast(user_id, forecast_id=None):
+    forecast_query = Forecast.query.filter(Forecast.user_id == user_id)
+    if forecast_id:
+        forecast_query = forecast_query.filter(Forecast.id == forecast_id)
+
+    for forecast in forecast_query.all():
+        db.session.delete(forecast)
     db.session.commit()
 
 
