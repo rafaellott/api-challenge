@@ -35,10 +35,10 @@ def add_forecast(data, user_id):
 
     days_id = data.get('days_id')
     days = None
-    if not data.get('period') and days_id:
+    if not data.get('days') and days_id:
         days = Days.query.filter(Days.id == days_id).one()
-    elif data.get('days_id'):
-        days = add_days(data.get('days_id'))
+    elif data.get('days'):
+        days = add_days(data.get('days'))
 
     forecast = Forecast(address, notification, period, days, user_id)
     db.session.add(forecast)
