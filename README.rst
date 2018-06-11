@@ -1,7 +1,8 @@
 Como instalar
 =============
 
-Requisitos:
+Requisitos
+----------
 
 * virtualenv
 
@@ -9,6 +10,8 @@ Requisitos:
 
 * Python 3.6
 
+Passo-a-passo
+-------------
 
 1 - Crie um ambiente virtual com o python 3
 
