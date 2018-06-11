@@ -10,3 +10,4 @@ SQLAlchemy==1.2.8
 Werkzeug==0.14.1
 flask-restplus
 weather-api
+flask_sqlalchemy
