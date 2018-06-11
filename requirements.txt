@@ -9,3 +9,5 @@ pytz==2018.4
 six==1.11.0
 SQLAlchemy==1.2.8
 Werkzeug==0.14.1
+flask-restplus
+weather-api
