@@ -54,5 +54,3 @@ Para ajuda digite:
 .. code-block:: bash
 
     $ flask export_csv --help
-
-
