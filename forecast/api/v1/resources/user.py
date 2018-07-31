@@ -11,54 +11,6 @@ from forecast.database.models import User, Forecast
 
 ns = api.namespace('users', description='Users operations')
 
-# Todo
-# Users = {
-#     '1': {
-#         'name': 'Fulano Beltrano',
-#         'forecast': [
-#             {
-#                 'address': 'Rua Marshmallow',
-#                 'period': {
-#                     'from': '08:00',
-#                     'to': '19:00'
-#                 },
-#                 'days': {
-#                     'sunday': True,
-#                     'monday': True,
-#                     'tuesday': True,
-#                     'wednesday': True,
-#                     'thursday': True,
-#                     'friday': False,
-#                     'saturday': False
-#                 },
-#                 'notification': '07:00'
-#             }
-#         ]
-#     },
-#     '2': {
-#         'name': 'Ciclano Beltrano',
-#         'forecast': [
-#             {
-#                 'address': 'Rua Oreo',
-#                 'period': {
-#                     'from': '22:00',
-#                     'to': '06:00'
-#                 },
-#                 'days': {
-#                     'sunday': True,
-#                     'monday': True,
-#                     'tuesday': True,
-#                     'wednesday': True,
-#                     'thursday': True,
-#                     'friday': False,
-#                     'saturday': False
-#                 },
-#                 'notification': '21:00'
-#             }
-#         ]
-#     }
-# }
-
 
 @ns.route('/')
 class UserCollection(Resource):
